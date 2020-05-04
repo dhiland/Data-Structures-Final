@@ -44,7 +44,7 @@ public class Block {
 	 * 
 	 * @return if the block contains a wall
 	 */
-	public boolean isContainsWall() {
+	public boolean containsWall() {
 		return containsWall;
 	}
 
@@ -68,7 +68,7 @@ public class Block {
 	 * 
 	 * @return if the block contains the cat
 	 */
-	public boolean isContainsCat() {
+	public boolean containsCat() {
 		return containsCat;
 	}
 
