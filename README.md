@@ -26,3 +26,20 @@ Chat Noir game. Final project for Data Structures and Algorithms class at Bethel
     - View and Model now both respond to clicks on the View
         - Tested: Cannot place walls on walls and cannot place walls on cat
 /**
+
+/** 5-4-2020 Josh Larson
+
+To Do:
+- Create method to randomly block squares (Josh)
+- Create alert method (Josh)
+- Game over method (game stops when it should) 
+- Add edge variable to block class (Dominic)
+- Add state switcher (so we know who's turn it is)
+- Figure out a loop to replace switch cases (Start with variable for number of blocks equal to 10,
+decrement for loop all the way down to 1 to take car of the bottom half of the game board)
+
+
+
+
+
+- Djikstra's algorithm
