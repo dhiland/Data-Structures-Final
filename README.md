@@ -34,9 +34,9 @@ To Do:
 - Create alert method (Josh)
 - Game over method (game stops when it should) 
 - Add edge variable to block class (Dominic)
-- Add state switcher (so we know who's turn it is)
+- Add state switcher (so we know who's turn it is) (Dominic)
 - Figure out a loop to replace switch cases (Start with variable for number of blocks equal to 10,
-decrement for loop all the way down to 1 to take car of the bottom half of the game board)
+decrement for loop all the way down to 1 to take car of the bottom half of the game board) (Dominic)
 
 
 
