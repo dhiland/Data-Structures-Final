@@ -2,9 +2,11 @@ package application;
 
 import java.util.ArrayList;
 
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -19,7 +21,7 @@ import javafx.scene.shape.Rectangle;
  * 
  * TODO: Add mouse listener to boxes for clicking functionality
  */
-public class ChatNoirView extends VBox {
+public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 
 	/**
 	 * Coordinates of the center of the grid
@@ -40,14 +42,20 @@ public class ChatNoirView extends VBox {
 	 * Object for the model of the current game
 	 */
 	private ChatNoirModel gameModel;
+	
+	/**
+	 * Reference to the mainline of the program
+	 */
+	private Main mainReference;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param gameModel Model for the current game
 	 */
-	public ChatNoirView(ChatNoirModel gameModel) {
+	public ChatNoirView(Main mainReference, ChatNoirModel gameModel) {
 		this.gameModel = gameModel;
+		this.mainReference = mainReference;
 		this.hBoxes = new ArrayList<>();
 		initializeBlocks();
 		for (int i = 0; i < hBoxes.size(); i++) {
@@ -145,6 +153,7 @@ public class ChatNoirView extends VBox {
 		}
 		tempRectangle.setHeight(30);
 		tempRectangle.setWidth(40);
+		tempRectangle.setOnMouseClicked(this);
 		return tempRectangle;
 	}
 
@@ -189,5 +198,21 @@ public class ChatNoirView extends VBox {
 		HBox tempHBox = new HBox();
 		tempHBox.setAlignment(Pos.CENTER);
 		return tempHBox;
+	}
+
+	@Override
+	public void handle(MouseEvent e) {
+		for (int i = 0; i < blocks.size(); i++) {
+			for (int j = 0; j < blocks.get(i).size(); j++) {
+				if (e.getSource() == blocks.get(i).get(j)) {
+					try {
+						gameModel.getBlocks().get(i).get(j).setContainsWall(true);
+						mainReference.redraw();
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+				}
+			}
+		}
 	}
 }
