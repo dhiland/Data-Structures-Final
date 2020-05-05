@@ -24,4 +24,5 @@ Chat Noir game. Final project for Data Structures and Algorithms class at Bethel
     - Changes to Main
         - added try-catch surrounded testing section for present and future use
     - View and Model now both respond to clicks on the View
+        - Tested: Cannot place walls on walls and cannot place walls on cat
 /**
