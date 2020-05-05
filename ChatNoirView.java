@@ -209,7 +209,7 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 						gameModel.getBlocks().get(i).get(j).setContainsWall(true);
 						mainReference.redraw();
 					} catch (Exception e2) {
-						// TODO: handle exception
+						System.err.println(e2.getMessage());
 					}
 				}
 			}
