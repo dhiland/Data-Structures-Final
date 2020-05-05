@@ -42,4 +42,4 @@ decrement for loop all the way down to 1 to take car of the bottom half of the g
 
 
 
-- Djikstra's algorithm
+- Djikstra's algorithm (Hopefully Gossett)
