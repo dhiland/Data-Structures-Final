@@ -33,13 +33,13 @@ To Do:
 - Create method to randomly block squares (Josh)
 - Create alert method (Josh)
 - Game over method (game stops when it should) 
-- Add edge variable to block class (Dominic)
-- Add state switcher (so we know who's turn it is) (Dominic)
+- Add edge variable to block class (Dominic)    Complete
+- Add state switcher (so we know who's turn it is) (Dominic)    Complete
 - Figure out a loop to replace switch cases (Start with variable for number of blocks equal to 10,
-decrement for loop all the way down to 1 to take car of the bottom half of the game board) (Dominic)
+decrement for loop all the way down to 1 to take car of the bottom half of the game board) (Dominic)    Complete
 
 
 
 
 
-- Djikstra's algorithm (Hopefully Gossett)
+- Djikstra's algorithm (Hopefully Gossett)    Complete
