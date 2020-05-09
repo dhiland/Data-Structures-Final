@@ -2,6 +2,7 @@ package application;
 
 /**
  * One block in the grid of blocks necessary for Chat Noir
+ * 
  * @author Dominic Hiland
  * @version 04/29/2020
  */
@@ -18,6 +19,11 @@ public class Block {
 	private boolean containsCat;
 
 	/**
+	 * Denotes if the Block was generated at an edge
+	 */
+	private boolean isEdge;
+
+	/**
 	 * Constructor
 	 */
 	public Block() {
@@ -27,16 +33,21 @@ public class Block {
 
 	/**
 	 * Constructor with overload
+	 * 
 	 * @param containsWall if the Block contains a wall
-	 * @param containsCat if the Block contains the cat
+	 * @param containsCat  if the Block contains the cat
 	 */
-	public Block(boolean containsWall, boolean containsCat) {
-		try {
-			setContainsWall(containsWall);
-			setContainsCat(containsCat);
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-		}
+	public Block(boolean isEdge) {
+		this.isEdge = isEdge;
+	}
+
+	/**
+	 * Gets if the Block is an edge
+	 * 
+	 * @return if the Block is an edge
+	 */
+	public boolean isEdge() {
+		return isEdge;
 	}
 
 	/**

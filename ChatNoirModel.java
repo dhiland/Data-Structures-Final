@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Model for the Chat Noir Game
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  * @author Dominic Hiland
  * @version 05/04/2020
  */
-public class ChatNoirModel { // -----> TODO: Write addWall(x, y) method <-----
+public class ChatNoirModel {
 
 	/**
 	 * Coordinates of the center of the grid
@@ -19,6 +20,11 @@ public class ChatNoirModel { // -----> TODO: Write addWall(x, y) method <-----
 	 * 2D ArrayList of Blocks. Stores the game grid
 	 */
 	private ArrayList<ArrayList<Block>> blocks;
+	
+	/**
+	 * state switcher; toggles between human player and cat player turns
+	 */
+	private boolean humanTurn;
 
 	/**
 	 * Constructor
@@ -40,9 +46,7 @@ public class ChatNoirModel { // -----> TODO: Write addWall(x, y) method <-----
 	 * Initializes game grid to a state where no blocks contain walls and the cat is
 	 * in the center
 	 * 
-	 * @Contains
-	 * -----> TODO: add random wall generation <----- 
-	 * -----> TODO: Figure out loop to replace Switch-Case <------
+	 * @Contains -----> TODO: add random wall generation 11 spaces <-----
 	 */
 	private void initializeGrid() {
 		// Initializing an empty 2d ArrayList for the Grid
@@ -54,64 +58,34 @@ public class ChatNoirModel { // -----> TODO: Write addWall(x, y) method <-----
 		// Filling the top cone of the grid
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < i + 1; j++) {
-				blocks.get(i).add(new Block());
+				if (j == 0 || j == i)
+					blocks.get(i).add(new Block(true));
+				else
+					blocks.get(i).add(new Block());
 			}
 		}
 
 		// Filling the center row of the grid
 		for (int i = 0; i < 11; i++)
-			blocks.get(10).add(new Block());
+			if (i == 0 || i == 10)
+				blocks.get(10).add(new Block(true));
+			else
+				blocks.get(10).add(new Block());
 
 		// Filling the bottom cone of the grid
 		for (int i = 11; i < 21; i++) {
-			// -----> TODO Figure out loop to replace Switch-Case <------
-			switch (i) {
-			case 11:
-				for (int j = 0; j < 10; j++)
+			for (int j = 0; j < 21 - i; j++) {
+				if (j == 0 || j == 21 - i)
+					blocks.get(i).add(new Block(true));
+				else
 					blocks.get(i).add(new Block());
-				break;
-			case 12:
-				for (int j = 0; j < 9; j++)
-					blocks.get(i).add(new Block());
-				break;
-			case 13:
-				for (int j = 0; j < 8; j++)
-					blocks.get(i).add(new Block());
-				break;
-			case 14:
-				for (int j = 0; j < 7; j++)
-					blocks.get(i).add(new Block());
-				break;
-			case 15:
-				for (int j = 0; j < 6; j++)
-					blocks.get(i).add(new Block());
-				break;
-			case 16:
-				for (int j = 0; j < 5; j++)
-					blocks.get(i).add(new Block());
-				break;
-			case 17:
-				for (int j = 0; j < 4; j++)
-					blocks.get(i).add(new Block());
-				break;
-			case 18:
-				for (int j = 0; j < 3; j++)
-					blocks.get(i).add(new Block());
-				break;
-			case 19:
-				for (int j = 0; j < 2; j++)
-					blocks.get(i).add(new Block());
-				break;
-			default:
-				blocks.get(i).add(new Block());
-				break;
 			}
 		}
 		// Filling the center block of the grid with the cat and updating the
 		// catLocation coordinates
 		try {
 			blocks.get(CENTER[0]).get(CENTER[1]).setContainsCat(true);
-			// -----> TODO: add random wall generation <----- 
+			// -----> TODO: add random wall generation <-----
 
 		} catch (Exception e) {
 			e.printStackTrace();

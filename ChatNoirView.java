@@ -17,9 +17,7 @@ import javafx.scene.shape.Rectangle;
  * View of the Chat Noir Game grid
  * 
  * @author Dominic Hiland
- * @version 05/04/2020
- * 
- * TODO: Add mouse listener to boxes for clicking functionality
+ * @version 05/04/2020 
  */
 public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 
@@ -88,48 +86,13 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 			blocks.get(10).add(createBlock(10, i));
 
 		// Filling the bottom cone of the grid
-		for (int i = 11; i < 21; i++) {
 			// -----> TODO Figure out loop to replace Switch-Case <------
-			switch (i) {
-			case 11:
-				for (int j = 0; j < 10; j++)
-					blocks.get(i).add(createBlock(11, j));
-				break;
-			case 12:
-				for (int j = 0; j < 9; j++)
-					blocks.get(i).add(createBlock(12, j));
-				break;
-			case 13:
-				for (int j = 0; j < 8; j++)
-					blocks.get(i).add(createBlock(13, j));
-				break;
-			case 14:
-				for (int j = 0; j < 7; j++)
-					blocks.get(i).add(createBlock(14, j));
-				break;
-			case 15:
-				for (int j = 0; j < 6; j++)
-					blocks.get(i).add(createBlock(15, j));
-				break;
-			case 16:
-				for (int j = 0; j < 5; j++)
-					blocks.get(i).add(createBlock(16, j));
-				break;
-			case 17:
-				for (int j = 0; j < 4; j++)
-					blocks.get(i).add(createBlock(17, j));
-				break;
-			case 18:
-				for (int j = 0; j < 3; j++)
-					blocks.get(i).add(createBlock(18, j));
-				break;
-			case 19:
-				for (int j = 0; j < 2; j++)
-					blocks.get(i).add(createBlock(19, j));
-				break;
-			default:
-				blocks.get(i).add(createBlock(20, 0));
-				break;
+		for (int i = 11; i < 21; i++) {
+			for (int j = 0; j < 21 - i; j++) {
+				if (j == 0 || j == 21 - i)
+					blocks.get(i).add(createBlock(i, j));
+				else
+					blocks.get(i).add(createBlock(i, j));
 			}
 		}
 		addBlocksToScene();

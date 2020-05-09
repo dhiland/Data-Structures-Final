@@ -23,7 +23,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 	private Button resetBtn;
 
 	/**
-	 * Label to give the user feedbaack about the status of the game
+	 * Label to give the user feedback about the status of the game
 	 */
 	private Label feedbackL;
 
