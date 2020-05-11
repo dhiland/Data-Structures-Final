@@ -30,8 +30,9 @@ Chat Noir game. Final project for Data Structures and Algorithms class at Bethel
 /** 5-4-2020 Josh Larson
 
 To Do:
-- Create method to randomly block squares (Josh)
-- Create alert method (Josh)
+- Create method to randomly block squares (Josh)    Complete
+- Create alert method (Josh)    Complete
+- Create cat movement method (Josh)     Complete
 - Game over method (game stops when it should) 
 - Add edge variable to block class (Dominic)    Complete
 - Add state switcher (so we know who's turn it is) (Dominic)    Complete
