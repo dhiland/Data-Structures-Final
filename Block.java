@@ -1,10 +1,11 @@
-package application;
+package aDSFinal;
 
 /**
  * One block in the grid of blocks necessary for Chat Noir
  * 
  * @author Dominic Hiland
- * @version 04/29/2020
+ * @author Josh Larson
+ * @version 05/11/2020
  */
 public class Block {
 
