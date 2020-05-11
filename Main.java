@@ -1,4 +1,4 @@
-package application;
+package aDSFinal;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -6,10 +6,16 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Main class of the Chat Noir Game
+ * 
+ * @author Dominic Hiland
+ * @author Josh Larson
+ * @version 05/11/2020
+ */
 public class Main extends Application implements EventHandler<ActionEvent> {
 
 	/**
@@ -41,6 +47,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
 			// Initializing view objects
 			gameModel = new ChatNoirModel();
+			gameModel.randomWalls();
 			resetBtn = new Button("Reset");
 			resetBtn.setOnAction(this);
 			feedbackL = new Label("Lorem ipsum dolor sit amet, consectetur adipiscing elit."); // TODO write
@@ -69,6 +76,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 	public void handle(ActionEvent e) {
 		if (e.getSource() == resetBtn) {
 			gameModel = new ChatNoirModel();
+			gameModel.randomWalls();
 			root.getChildren().clear();
 			root.getChildren().add(resetBtn);
 			root.getChildren().add(new ChatNoirView(this, gameModel));
