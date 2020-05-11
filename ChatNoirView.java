@@ -1,7 +1,9 @@
-package application;
+package aDSFinal;
 
 import java.util.ArrayList;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -17,7 +19,8 @@ import javafx.scene.shape.Rectangle;
  * View of the Chat Noir Game grid
  * 
  * @author Dominic Hiland
- * @version 05/04/2020 
+ * @author Josh Larson
+ * @version 05/11/2020
  */
 public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 
@@ -40,7 +43,7 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 	 * Object for the model of the current game
 	 */
 	private ChatNoirModel gameModel;
-	
+
 	/**
 	 * Reference to the mainline of the program
 	 */
@@ -86,7 +89,7 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 			blocks.get(10).add(createBlock(10, i));
 
 		// Filling the bottom cone of the grid
-			// -----> TODO Figure out loop to replace Switch-Case <------
+		// -----> TODO Figure out loop to replace Switch-Case <------
 		for (int i = 11; i < 21; i++) {
 			for (int j = 0; j < 21 - i; j++) {
 				if (j == 0 || j == 21 - i)
@@ -163,18 +166,74 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 		return tempHBox;
 	}
 
+	/**
+	 * Method that creates alerts
+	 * 
+	 * @param type    The type of alert
+	 * @param title   The title of the alert
+	 * @param message The message of the alert
+	 * @return info The actual alert of the specified type
+	 */
+	public Alert createAlert(AlertType type, String title, String message) {
+		Alert info = new Alert(type);
+		info.setTitle(title);
+		info.setContentText(message);
+		info.showAndWait();
+		return info;
+
+	}
+
 	@Override
 	public void handle(MouseEvent e) {
 		for (int i = 0; i < blocks.size(); i++) {
 			for (int j = 0; j < blocks.get(i).size(); j++) {
 				if (e.getSource() == blocks.get(i).get(j)) {
-					try {
-						gameModel.getBlocks().get(i).get(j).setContainsWall(true);
-						mainReference.redraw();
-					} catch (Exception e2) {
-						System.err.println(e2.getMessage());
+
+					if (gameModel.getCatTurn() == true) {
+						try {
+							if (gameModel.getBlocks().get(i).get(j).containsWall() == true)
+								throw new Exception("Cannot move cat to wall");
+
+						} catch (Exception catToWall) {
+							createAlert(AlertType.ERROR, "Error", catToWall.getMessage());
+							continue;
+
+						}
+						try {
+							if (gameModel.getBlocks().get(i).get(j).containsCat() == true)
+								throw new Exception("Cat is already on that block");
+
+						} catch (Exception catToCat) {
+							createAlert(AlertType.ERROR, "Error", catToCat.getMessage());
+							continue;
+
+						}
+						try {
+							gameModel.moveCat(gameModel.getBlocks().get(i).get(j));
+							gameModel.switchStates();
+							mainReference.redraw();
+						} catch (Exception catToAdjacent) {
+							createAlert(AlertType.ERROR, "Error", "Cat must be moved to an adjacent block");
+							continue;
+						}
+					} else {
+						try {
+							if (gameModel.getBlocks().get(i).get(j).containsCat() == true)
+								throw new Exception("Cannot put wall on Cat's current position");
+						} catch (Exception wallToCat) {
+							createAlert(AlertType.ERROR, "Error", wallToCat.getMessage());
+							continue;
+						}
+						try {
+							gameModel.getBlocks().get(i).get(j).setContainsWall(true);
+							gameModel.switchStates();
+							mainReference.redraw();
+						} catch (Exception AlreadyWall) {
+							createAlert(AlertType.ERROR, "Error", "There is already a wall there");
+						}
 					}
 				}
+
 			}
 		}
 	}
