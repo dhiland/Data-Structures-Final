@@ -1,4 +1,4 @@
-package application;
+package aDSFinal;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -7,7 +7,8 @@ import java.util.Random;
  * Model for the Chat Noir Game
  * 
  * @author Dominic Hiland
- * @version 05/04/2020
+ * @author Josh Larson
+ * @version 05/11/2020
  */
 public class ChatNoirModel {
 
@@ -20,11 +21,54 @@ public class ChatNoirModel {
 	 * 2D ArrayList of Blocks. Stores the game grid
 	 */
 	private ArrayList<ArrayList<Block>> blocks;
-	
+
 	/**
 	 * state switcher; toggles between human player and cat player turns
 	 */
-	private boolean humanTurn;
+	private boolean catTurn = true;
+
+	/**
+	 * denotes the block the cat is currently on
+	 */
+	private Block catPosition;
+	/**
+	 * denotes the coordinates for the block the cat is currently on
+	 */
+	private int[] catCoordinates = { 10, 5 };
+
+	/**
+	 * Getter method for catCoordinates
+	 * 
+	 * @return catCoordinates An array of two ints denoting x,y coordinates of cat
+	 */
+	public int[] getcatCoordinates() {
+		return catCoordinates;
+	}
+
+	/**
+	 * Setter method for catCoordinates
+	 * 
+	 * @param catCoordinates An array of two ints denoting x,y coordinates of cat
+	 */
+	public void setcatCoordinates(int[] catCoordinates) {
+		this.catCoordinates = catCoordinates;
+	}
+
+	public boolean getCatTurn() {
+		return catTurn;
+	}
+
+	public Block getCatPosition() {
+		return catPosition;
+	}
+
+	public void setCatPosition(Block catPosition) {
+		this.catPosition = catPosition;
+	}
+
+	public void setCatTurn(boolean catTurn) {
+		this.catTurn = catTurn;
+	}
 
 	/**
 	 * Constructor
@@ -46,7 +90,7 @@ public class ChatNoirModel {
 	 * Initializes game grid to a state where no blocks contain walls and the cat is
 	 * in the center
 	 * 
-	 * @Contains -----> TODO: add random wall generation 11 spaces <-----
+	 * 
 	 */
 	private void initializeGrid() {
 		// Initializing an empty 2d ArrayList for the Grid
@@ -85,7 +129,7 @@ public class ChatNoirModel {
 		// catLocation coordinates
 		try {
 			blocks.get(CENTER[0]).get(CENTER[1]).setContainsCat(true);
-			// -----> TODO: add random wall generation <-----
+			catPosition = blocks.get(CENTER[0]).get(CENTER[1]);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,4 +164,131 @@ public class ChatNoirModel {
 		}
 		return printout;
 	}
+
+	/**
+	 * Method that randomly generates walls
+	 * 
+	 * The default is set to 11 walls but could be changed (possibly even ask the
+	 * user to select number blocked)
+	 * 
+	 */
+	public void randomWalls() {
+		Random random = new Random();
+		int numRandWalls = 0;
+		while (numRandWalls < 11) {
+			int xCoord = random.nextInt(21);
+			int yMax = blocks.get(xCoord).size();
+			int yCoord = random.nextInt(yMax);
+			try {
+				blocks.get(xCoord).get(yCoord).setContainsWall(true);
+				numRandWalls++;
+			} catch (Exception e) {
+				e.getMessage();
+			}
+
+		}
+	}
+
+	/**
+	 * Method that determines what blocks are adjacent to the cat This method
+	 * determines what the cat's legal moves are
+	 * 
+	 * @param currentBlock The block the cat is currently on
+	 * @return adjacentBlocks An ArrayList containing the six blocks that are
+	 *         adjacent to the cat's current position
+	 */
+	public ArrayList<Block> selectAdjacentBlock(Block currentBlock) {
+		ArrayList<Block> adjacentBlocks = new ArrayList<Block>();
+		// if the cat is in the top half of the board
+		if (catCoordinates[0] < 10) {
+			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1] - 1));
+			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1]));
+			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] - 1));
+			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] + 1));
+			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1]));
+			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1] + 1));
+		}
+		// if the cat is in the middle row of the board
+		else if (catCoordinates[0] == 10) {
+			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1] - 1));
+			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1]));
+			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] - 1));
+			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] + 1));
+			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1] - 1));
+			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1]));
+		}
+		// if the cat is in the bottom half of the board
+		else {
+			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1]));
+			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1] + 1));
+			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] - 1));
+			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] + 1));
+			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1] - 1));
+			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1]));
+		}
+		return adjacentBlocks;
+	}
+
+	/**
+	 * Method that moves the cat
+	 * 
+	 * @param moveCatTo The block the cat is moving to
+	 * @throws Exception if the user tries moving the cat to a block that is not
+	 *                   adjacent to the cat
+	 */
+	public void moveCat(Block moveCatTo) throws Exception {
+		if (moveCatTo.containsWall() == true) {
+			throw new Exception("Cat cannot be moved to a wall");
+		}
+		ArrayList<Block> tempBlocks = selectAdjacentBlock(catPosition);
+		int numberFailed = 0;
+		for (int i = 0; i < tempBlocks.size(); i++) {
+			if (tempBlocks.get(i) == moveCatTo) {
+				catPosition.setContainsCat(false);
+				catPosition = moveCatTo;
+				catPosition.setContainsCat(true);
+				setcatCoordinates(getBlockCoordinates(moveCatTo));
+			} else {
+				numberFailed++;
+			}
+		}
+		// if the spot the user tries to move the cat to is not one of the six adjacent
+		// blocks
+		if (numberFailed == 6) {
+			throw new Exception("Cat must move to adjacent space");
+		}
+
+	}
+
+	/**
+	 * Method that keeps track of who's turn it is
+	 */
+	public void switchStates() {
+		if (catTurn == true) {
+			catTurn = false;
+		} else
+			catTurn = true;
+	}
+
+	/**
+	 * Method that gets the coordinates of a specified block
+	 * 
+	 * @param blockInQuestion The block that we are getting the coordinates of
+	 * @return blockCoordinates An array of two ints that has the x,y coordinates of
+	 *         the block
+	 */
+	public int[] getBlockCoordinates(Block blockInQuestion) {
+		int[] blockCoordinates = new int[2];
+		for (int i = 0; i < blocks.size(); i++) {
+			for (int j = 0; j < blocks.get(i).size(); j++) {
+				if (blocks.get(i).get(j) == blockInQuestion) {
+					blockCoordinates[0] = i;
+					blockCoordinates[1] = j;
+				}
+			}
+		}
+		return blockCoordinates;
+
+	}
+
 }
