@@ -54,22 +54,6 @@ public class ChatNoirModel {
 		this.catCoordinates = catCoordinates;
 	}
 
-	private boolean getCatTurn() {
-		return catTurn;
-	}
-
-	private Block getCatPosition() {
-		return catPosition;
-	}
-
-	private void setCatPosition(Block catPosition) {
-		this.catPosition = catPosition;
-	}
-
-	private void setCatTurn(boolean catTurn) {
-		this.catTurn = catTurn;
-	}
-
 	/**
 	 * Constructor
 	 */
