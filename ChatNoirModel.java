@@ -50,23 +50,23 @@ public class ChatNoirModel {
 	 * 
 	 * @param catCoordinates An array of two ints denoting x,y coordinates of cat
 	 */
-	public void setcatCoordinates(int[] catCoordinates) {
+	private void setcatCoordinates(int[] catCoordinates) {
 		this.catCoordinates = catCoordinates;
 	}
 
-	public boolean getCatTurn() {
+	private boolean getCatTurn() {
 		return catTurn;
 	}
 
-	public Block getCatPosition() {
+	private Block getCatPosition() {
 		return catPosition;
 	}
 
-	public void setCatPosition(Block catPosition) {
+	private void setCatPosition(Block catPosition) {
 		this.catPosition = catPosition;
 	}
 
-	public void setCatTurn(boolean catTurn) {
+	private void setCatTurn(boolean catTurn) {
 		this.catTurn = catTurn;
 	}
 
@@ -284,6 +284,19 @@ public class ChatNoirModel {
 		}
 		return blockCoordinates;
 
+	}
+
+	public void checkLegalMove(Block clickedBlock) throws Exception {
+
+		if (catTurn == true) {
+			moveCat(clickedBlock);
+			switchStates();
+
+		} else {
+			clickedBlock.setContainsWall(true);
+			switchStates();
+
+		}
 	}
 
 }

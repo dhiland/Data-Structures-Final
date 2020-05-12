@@ -188,50 +188,14 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 		for (int i = 0; i < blocks.size(); i++) {
 			for (int j = 0; j < blocks.get(i).size(); j++) {
 				if (e.getSource() == blocks.get(i).get(j)) {
-
-					if (gameModel.getCatTurn() == true) {
-						try {
-							if (gameModel.getBlocks().get(i).get(j).containsWall() == true)
-								throw new Exception("Cannot move cat to wall");
-
-						} catch (Exception catToWall) {
-							createAlert(AlertType.ERROR, "Error", catToWall.getMessage());
-							continue;
-
-						}
-						try {
-							if (gameModel.getBlocks().get(i).get(j).containsCat() == true)
-								throw new Exception("Cat is already on that block");
-
-						} catch (Exception catToCat) {
-							createAlert(AlertType.ERROR, "Error", catToCat.getMessage());
-							continue;
-
-						}
-						try {
-							gameModel.moveCat(gameModel.getBlocks().get(i).get(j));
-							gameModel.switchStates();
-							mainReference.redraw();
-						} catch (Exception catToAdjacent) {
-							createAlert(AlertType.ERROR, "Error", "Cat must be moved to an adjacent block");
-							continue;
-						}
-					} else {
-						try {
-							if (gameModel.getBlocks().get(i).get(j).containsCat() == true)
-								throw new Exception("Cannot put wall on Cat's current position");
-						} catch (Exception wallToCat) {
-							createAlert(AlertType.ERROR, "Error", wallToCat.getMessage());
-							continue;
-						}
-						try {
-							gameModel.getBlocks().get(i).get(j).setContainsWall(true);
-							gameModel.switchStates();
-							mainReference.redraw();
-						} catch (Exception AlreadyWall) {
-							createAlert(AlertType.ERROR, "Error", "There is already a wall there");
-						}
+					try {
+						gameModel.checkLegalMove((gameModel.getBlocks().get(i).get(j)));
+						mainReference.redraw();
+					} catch (Exception ex) {
+						System.err.println(ex.getMessage());
+						createAlert(AlertType.ERROR, "Error", ex.getMessage());
 					}
+
 				}
 
 			}
