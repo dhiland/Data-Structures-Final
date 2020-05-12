@@ -1,5 +1,7 @@
 package application;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javafx.scene.control.Alert;
@@ -22,7 +24,7 @@ import javafx.scene.shape.Rectangle;
  * @author Josh Larson
  * @version 05/11/2020
  */
-public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
+public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, PropertyChangeListener {
 
 	/**
 	 * Coordinates of the center of the grid
@@ -190,7 +192,6 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 				if (e.getSource() == blocks.get(i).get(j)) {
 					try {
 						gameModel.checkLegalMove(i, j);
-						mainReference.redraw();
 					} catch (Exception ex) {
 						System.err.println(ex.getMessage());
 						createAlert(AlertType.ERROR, "Error", ex.getMessage());
@@ -200,5 +201,11 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 
 			}
 		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		mainReference.redraw();
+		// Anything that needs to be redone after data changes
 	}
 }
