@@ -1,4 +1,4 @@
-package aDSFinal;
+package application;
 
 /**
  * One block in the grid of blocks necessary for Chat Noir
@@ -39,6 +39,12 @@ public class Block {
 	 * @param containsCat  if the Block contains the cat
 	 */
 	public Block(boolean isEdge) {
+		this.isEdge = isEdge;
+	}
+	
+	public Block (boolean containsWall, boolean containsCat, boolean isEdge) {
+		this.containsWall = containsWall;
+		this.containsCat = containsCat;
 		this.isEdge = isEdge;
 	}
 

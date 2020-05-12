@@ -1,4 +1,4 @@
-package aDSFinal;
+package application;
 
 import java.util.ArrayList;
 
@@ -108,9 +108,9 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 	 */
 	private Rectangle createBlock(int xCoord, int yCoord) {
 		Rectangle tempRectangle = new Rectangle();
-		if (gameModel.getBlocks().get(xCoord).get(yCoord).containsWall()
-				|| gameModel.getBlocks().get(xCoord).get(yCoord).containsCat()) {
-			if (gameModel.getBlocks().get(xCoord).get(yCoord).containsWall())
+		if (gameModel.getBlock(xCoord, yCoord).containsWall()
+				|| gameModel.getBlock(xCoord, yCoord).containsCat()) {
+			if (gameModel.getBlock(xCoord, yCoord).containsWall())
 				tempRectangle.setFill(Color.GRAY);
 			else
 				tempRectangle.setFill(Color.BLACK);
@@ -174,7 +174,7 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 	 * @param message The message of the alert
 	 * @return info The actual alert of the specified type
 	 */
-	public Alert createAlert(AlertType type, String title, String message) {
+	private Alert createAlert(AlertType type, String title, String message) {
 		Alert info = new Alert(type);
 		info.setTitle(title);
 		info.setContentText(message);
@@ -189,7 +189,7 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent> {
 			for (int j = 0; j < blocks.get(i).size(); j++) {
 				if (e.getSource() == blocks.get(i).get(j)) {
 					try {
-						gameModel.checkLegalMove((gameModel.getBlocks().get(i).get(j)));
+						gameModel.checkLegalMove(i, j);
 						mainReference.redraw();
 					} catch (Exception ex) {
 						System.err.println(ex.getMessage());

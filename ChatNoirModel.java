@@ -1,4 +1,4 @@
-package aDSFinal;
+package application;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -82,15 +82,14 @@ public class ChatNoirModel {
 	 * 
 	 * @return the grid of blocks
 	 */
-	public ArrayList<ArrayList<Block>> getBlocks() {
-		return blocks;
+	public Block getBlock(int x, int y) {
+		Block referenceBlock = blocks.get(x).get(y);
+		return new Block(referenceBlock.containsWall(), referenceBlock.containsCat(), referenceBlock.isEdge());
 	}
 
 	/**
 	 * Initializes game grid to a state where no blocks contain walls and the cat is
 	 * in the center
-	 * 
-	 * 
 	 */
 	private void initializeGrid() {
 		// Initializing an empty 2d ArrayList for the Grid
@@ -98,7 +97,6 @@ public class ChatNoirModel {
 		for (int i = 0; i < 21; i++) {
 			blocks.add(new ArrayList<Block>());
 		}
-
 		// Filling the top cone of the grid
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < i + 1; j++) {
@@ -134,35 +132,8 @@ public class ChatNoirModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public String toString() {
-		String printout = new String();
-		// Numbering the rows of the printout
-		for (int i = 0; i < 21; i++) {
-			// Conditions keep columns in-line with one another
-			if (i < 10)
-				printout += i + ":   ";
-			else
-				printout += i + ":  ";
-			// Populating rows with appropriate number of spaces to match the grid
-			for (int j = 0; j < blocks.get(i).size(); j++) {
-				// Changes the character printed based on the status of the block (i.e. if it
-				// contains a wall print a 'W' or if it contains the cat print a 'C'. If the
-				// block is empty print a '-'
-				if (blocks.get(i).get(j).containsWall() || blocks.get(i).get(j).containsCat()) {
-					if (blocks.get(i).get(j).containsWall())
-						printout += 'W';
-					else
-						printout += 'C';
-				} else {
-					printout += '-';
-				}
-			}
-			printout += '\n';
-		}
-		return printout;
+		// Generating randomly placed walls
+		randomWalls();
 	}
 
 	/**
@@ -172,7 +143,7 @@ public class ChatNoirModel {
 	 * user to select number blocked)
 	 * 
 	 */
-	public void randomWalls() {
+	private void randomWalls() {
 		Random random = new Random();
 		int numRandWalls = 0;
 		while (numRandWalls < 11) {
@@ -197,7 +168,7 @@ public class ChatNoirModel {
 	 * @return adjacentBlocks An ArrayList containing the six blocks that are
 	 *         adjacent to the cat's current position
 	 */
-	public ArrayList<Block> selectAdjacentBlock(Block currentBlock) {
+	private ArrayList<Block> selectAdjacentBlock(Block currentBlock) {
 		ArrayList<Block> adjacentBlocks = new ArrayList<Block>();
 		adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] - 1));
 		adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] + 1));
@@ -231,7 +202,7 @@ public class ChatNoirModel {
 	 * @throws Exception if the user tries moving the cat to a block that is not
 	 *                   adjacent to the cat
 	 */
-	public void moveCat(Block moveCatTo) throws Exception {
+	private void moveCat(Block moveCatTo) throws Exception {
 		if (moveCatTo.containsWall() == true) {
 			throw new Exception("Cat cannot be moved to a wall");
 		}
@@ -258,7 +229,7 @@ public class ChatNoirModel {
 	/**
 	 * Method that keeps track of who's turn it is
 	 */
-	public void switchStates() {
+	private void switchStates() {
 		if (catTurn == true) {
 			catTurn = false;
 		} else
@@ -272,7 +243,7 @@ public class ChatNoirModel {
 	 * @return blockCoordinates An array of two ints that has the x,y coordinates of
 	 *         the block
 	 */
-	public int[] getBlockCoordinates(Block blockInQuestion) {
+	private int[] getBlockCoordinates(Block blockInQuestion) {
 		int[] blockCoordinates = new int[2];
 		for (int i = 0; i < blocks.size(); i++) {
 			for (int j = 0; j < blocks.get(i).size(); j++) {
@@ -286,9 +257,9 @@ public class ChatNoirModel {
 
 	}
 
-	public void checkLegalMove(Block clickedBlock) throws Exception {
-
-		if (catTurn == true) {
+	public void checkLegalMove(int xCoord, int yCoord) throws Exception {
+		Block clickedBlock = blocks.get(xCoord).get(yCoord);
+		if (catTurn) {
 			moveCat(clickedBlock);
 			switchStates();
 
@@ -299,4 +270,32 @@ public class ChatNoirModel {
 		}
 	}
 
+	@Override
+	public String toString() {
+		String printout = new String();
+		// Numbering the rows of the printout
+		for (int i = 0; i < 21; i++) {
+			// Conditions keep columns in-line with one another
+			if (i < 10)
+				printout += i + ":   ";
+			else
+				printout += i + ":  ";
+			// Populating rows with appropriate number of spaces to match the grid
+			for (int j = 0; j < blocks.get(i).size(); j++) {
+				// Changes the character printed based on the status of the block (i.e. if it
+				// contains a wall print a 'W' or if it contains the cat print a 'C'. If the
+				// block is empty print a '-'
+				if (blocks.get(i).get(j).containsWall() || blocks.get(i).get(j).containsCat()) {
+					if (blocks.get(i).get(j).containsWall())
+						printout += 'W';
+					else
+						printout += 'C';
+				} else {
+					printout += '-';
+				}
+			}
+			printout += '\n';
+		}
+		return printout;
+	}
 }

@@ -1,4 +1,4 @@
-package aDSFinal;
+package application;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -47,7 +47,6 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
 			// Initializing view objects
 			gameModel = new ChatNoirModel();
-			gameModel.randomWalls();
 			resetBtn = new Button("Reset");
 			resetBtn.setOnAction(this);
 			feedbackL = new Label("Lorem ipsum dolor sit amet, consectetur adipiscing elit."); // TODO write
@@ -76,7 +75,6 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 	public void handle(ActionEvent e) {
 		if (e.getSource() == resetBtn) {
 			gameModel = new ChatNoirModel();
-			gameModel.randomWalls();
 			root.getChildren().clear();
 			root.getChildren().add(resetBtn);
 			root.getChildren().add(new ChatNoirView(this, gameModel));
