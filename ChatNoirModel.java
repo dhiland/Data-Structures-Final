@@ -199,32 +199,27 @@ public class ChatNoirModel {
 	 */
 	public ArrayList<Block> selectAdjacentBlock(Block currentBlock) {
 		ArrayList<Block> adjacentBlocks = new ArrayList<Block>();
+		adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] - 1));
+		adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] + 1));
+		adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1]));
+		adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1]));
+
 		// if the cat is in the top half of the board
 		if (catCoordinates[0] < 10) {
 			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1] - 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1]));
-			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] - 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] + 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1]));
 			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1] + 1));
 		}
 		// if the cat is in the middle row of the board
 		else if (catCoordinates[0] == 10) {
 			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1] - 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1]));
-			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] - 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] + 1));
 			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1] - 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1]));
+
 		}
 		// if the cat is in the bottom half of the board
 		else {
-			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1]));
 			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1] + 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] - 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] + 1));
 			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1] - 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1]));
+
 		}
 		return adjacentBlocks;
 	}
