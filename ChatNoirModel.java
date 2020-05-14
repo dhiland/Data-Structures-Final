@@ -1,7 +1,10 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * Model for the Chat Noir Game
@@ -34,7 +37,7 @@ public class ChatNoirModel {
 	/**
 	 * denotes the coordinates for the block the cat is currently on
 	 */
-	private int[] catCoordinates = { 10, 5 };
+	private int[] catCoordinates = CENTER;
 
 	/**
 	 * Getter method for catCoordinates
@@ -243,15 +246,76 @@ public class ChatNoirModel {
 
 	public void checkLegalMove(int xCoord, int yCoord) throws Exception {
 		Block clickedBlock = blocks.get(xCoord).get(yCoord);
+		
 		if (catTurn) {
-			moveCat(clickedBlock);
-			switchStates();
-
+			if (dijkstras() == false) { // TODO why is this false??
+				moveCat(clickedBlock);
+				switchStates();
+			}
 		} else {
 			clickedBlock.setContainsWall(true);
 			switchStates();
-
 		}
+//		if (gameOver() == true)
+//			throw new IllegalArgumentException("Game Over: Cat wins");
+	}
+	
+	private boolean gameOver() {
+		if (blocks.get(catCoordinates[0]).get(catCoordinates[1]).isEdge())
+			return true;
+		if (dijkstras() == false)
+			return true;
+		return false;
+	}
+	
+	private boolean dijkstras() {
+		Queue<Block> queue = new LinkedList<>();
+		Block referencePoint = blocks.get(catCoordinates[0]).get(catCoordinates[1]);
+		queue.add(referencePoint);
+		ArrayList<ArrayList<Boolean>> bools = new ArrayList<>();
+		for (int i = 0; i < blocks.size(); i++) {
+			bools.add(new ArrayList<Boolean>());
+		}
+		// Filling the top cone of the boolean grid
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < i + 1; j++) {
+				if (j == 0 || j == i)
+					bools.get(i).add(false);
+				else
+					bools.get(i).add(false);
+			}
+		}
+		// Filling the center row of the boolean grid
+		for (int i = 0; i < 11; i++)
+			if (i == 0 || i == 10)
+				bools.get(10).add(false);
+			else
+				bools.get(10).add(false);
+		// Filling the bottom cone of the boolean grid
+		for (int i = 11; i < 21; i++) {
+			for (int j = 0; j < 21 - i; j++) {
+				if (j == 0 || j == 21 - i)
+					bools.get(i).add(false);
+				else
+					bools.get(i).add(false);
+			}
+		}
+		while (queue.isEmpty() == false) {
+			referencePoint = queue.remove();
+			int[] referenceCoordinates = getBlockCoordinates(referencePoint);
+			bools.get(referenceCoordinates[0]).set(referenceCoordinates[1], true);
+			ArrayList<Block> adjacentBlocks = selectAdjacentBlock(referencePoint);
+			for (int i = 0; i < 6; i++) {
+				if (!adjacentBlocks.get(i).containsWall() && !adjacentBlocks.get(i).isEdge()) {
+					int[] adjacentBlockCoordinates = getBlockCoordinates(adjacentBlocks.get(i));
+					if (bools.get(adjacentBlockCoordinates[0]).get(adjacentBlockCoordinates[1]) == false)
+						queue.add(adjacentBlocks.get(i));
+				}
+				else if (adjacentBlocks.get(i).isEdge())
+					return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

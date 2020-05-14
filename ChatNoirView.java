@@ -192,10 +192,15 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 				if (e.getSource() == blocks.get(i).get(j)) {
 					try {
 						gameModel.checkLegalMove(i, j);
+						mainReference.redraw(); // TODO delete line
+
+					} catch (IllegalArgumentException ie) {
+						System.err.println(ie.getMessage());
+						createAlert(AlertType.INFORMATION, "Game Over", ie.getMessage());
 					} catch (Exception ex) {
 						System.err.println(ex.getMessage());
 						createAlert(AlertType.ERROR, "Error", ex.getMessage());
-					}
+					} 
 
 				}
 
