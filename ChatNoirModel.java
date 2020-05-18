@@ -291,7 +291,8 @@ public class ChatNoirModel {
 				for (int i = 0; i < adjacentBlocks.size(); i++) {
 					int[] adjacentBlockCoords = getBlockCoordinates(adjacentBlocks.get(i));
 					if (bools.get(adjacentBlockCoords[0]).get(adjacentBlockCoords[1]) == false) {
-						queue.add(blocks.get(adjacentBlockCoords[0]).get(adjacentBlockCoords[1]));
+						if (blocks.get(adjacentBlockCoords[0]).get(adjacentBlockCoords[1]).containsWall() == false)
+							queue.add(blocks.get(adjacentBlockCoords[0]).get(adjacentBlockCoords[1]));
 					}
 				}
 			}
