@@ -1,5 +1,7 @@
 package application;
 
+
+
 /**
  * One block in the grid of blocks necessary for Chat Noir
  * 

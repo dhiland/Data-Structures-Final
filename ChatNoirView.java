@@ -110,8 +110,7 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 	 */
 	private Rectangle createBlock(int xCoord, int yCoord) {
 		Rectangle tempRectangle = new Rectangle();
-		if (gameModel.getBlock(xCoord, yCoord).containsWall()
-				|| gameModel.getBlock(xCoord, yCoord).containsCat()) {
+		if (gameModel.getBlock(xCoord, yCoord).containsWall() || gameModel.getBlock(xCoord, yCoord).containsCat()) {
 			if (gameModel.getBlock(xCoord, yCoord).containsWall())
 				tempRectangle.setFill(Color.GRAY);
 			else
@@ -188,11 +187,19 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 	@Override
 	public void handle(MouseEvent e) {
 		for (int i = 0; i < blocks.size(); i++) {
+			if (gameModel.gameOver() == true) {
+				createAlert(AlertType.INFORMATION, "Congratulations", "Cat Wins");
+				break;
+			}
+
 			for (int j = 0; j < blocks.get(i).size(); j++) {
+
 				if (e.getSource() == blocks.get(i).get(j)) {
 					try {
 						gameModel.checkLegalMove(i, j);
-						mainReference.redraw(); // TODO delete line
+						mainReference.redraw();
+
+						// TODO delete line
 
 					} catch (IllegalArgumentException ie) {
 						System.err.println(ie.getMessage());
@@ -200,7 +207,7 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 					} catch (Exception ex) {
 						System.err.println(ex.getMessage());
 						createAlert(AlertType.ERROR, "Error", ex.getMessage());
-					} 
+					}
 
 				}
 

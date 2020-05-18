@@ -34,28 +34,6 @@ public class ChatNoirModel {
 	 * denotes the block the cat is currently on
 	 */
 	private Block catPosition;
-	/**
-	 * denotes the coordinates for the block the cat is currently on
-	 */
-	private int[] catCoordinates = CENTER;
-
-	/**
-	 * Getter method for catCoordinates
-	 * 
-	 * @return catCoordinates An array of two ints denoting x,y coordinates of cat
-	 */
-	public int[] getcatCoordinates() {
-		return catCoordinates;
-	}
-
-	/**
-	 * Setter method for catCoordinates
-	 * 
-	 * @param catCoordinates An array of two ints denoting x,y coordinates of cat
-	 */
-	private void setcatCoordinates(int[] catCoordinates) {
-		this.catCoordinates = catCoordinates;
-	}
 
 	/**
 	 * Constructor
@@ -104,7 +82,7 @@ public class ChatNoirModel {
 		// Filling the bottom cone of the grid
 		for (int i = 11; i < 21; i++) {
 			for (int j = 0; j < 21 - i; j++) {
-				if (j == 0 || j == 21 - i)
+				if (j == 0 || j == 21 - 1 - i)
 					blocks.get(i).add(new Block(true));
 				else
 					blocks.get(i).add(new Block());
@@ -157,26 +135,26 @@ public class ChatNoirModel {
 	 */
 	private ArrayList<Block> selectAdjacentBlock(Block currentBlock) {
 		ArrayList<Block> adjacentBlocks = new ArrayList<Block>();
-		adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] - 1));
-		adjacentBlocks.add(blocks.get(catCoordinates[0]).get(catCoordinates[1] + 1));
-		adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1]));
-		adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1]));
+		adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0]).get(getBlockCoordinates(currentBlock)[1] - 1));
+		adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0]).get(getBlockCoordinates(currentBlock)[1] + 1));
+		adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1]));
+		adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1]));
 
 		// if the cat is in the top half of the board
-		if (catCoordinates[0] < 10) {
-			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1] - 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1] + 1));
+		if (getBlockCoordinates(currentBlock)[0] < 10) {
+			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1] - 1));
+			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1] + 1));
 		}
 		// if the cat is in the middle row of the board
-		else if (catCoordinates[0] == 10) {
-			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1] - 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1] - 1));
+		else if (getBlockCoordinates(currentBlock)[0] == 10) {
+			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1] - 1));
+			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1] - 1));
 
 		}
 		// if the cat is in the bottom half of the board
 		else {
-			adjacentBlocks.add(blocks.get(catCoordinates[0] - 1).get(catCoordinates[1] + 1));
-			adjacentBlocks.add(blocks.get(catCoordinates[0] + 1).get(catCoordinates[1] - 1));
+			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1] + 1));
+			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1] - 1));
 
 		}
 		return adjacentBlocks;
@@ -190,6 +168,8 @@ public class ChatNoirModel {
 	 *                   adjacent to the cat
 	 */
 	private void moveCat(Block moveCatTo) throws Exception {
+		
+
 		if (moveCatTo.containsWall() == true) {
 			throw new Exception("Cat cannot be moved to a wall");
 		}
@@ -199,8 +179,10 @@ public class ChatNoirModel {
 			if (tempBlocks.get(i) == moveCatTo) {
 				catPosition.setContainsCat(false);
 				catPosition = moveCatTo;
+				
 				catPosition.setContainsCat(true);
-				setcatCoordinates(getBlockCoordinates(moveCatTo));
+//				catCoordinates = getBlockCoordinates(moveCatTo);
+				
 			} else {
 				numberFailed++;
 			}
@@ -210,7 +192,7 @@ public class ChatNoirModel {
 		if (numberFailed == 6) {
 			throw new Exception("Cat must move to adjacent space");
 		}
-
+		
 	}
 
 	/**
@@ -246,9 +228,9 @@ public class ChatNoirModel {
 
 	public void checkLegalMove(int xCoord, int yCoord) throws Exception {
 		Block clickedBlock = blocks.get(xCoord).get(yCoord);
-		
+
 		if (catTurn) {
-			if (dijkstras() == false) { // TODO why is this false??
+			if (hasPath() == true) { // TODO why is this false??
 				moveCat(clickedBlock);
 				switchStates();
 			}
@@ -256,21 +238,19 @@ public class ChatNoirModel {
 			clickedBlock.setContainsWall(true);
 			switchStates();
 		}
-//		if (gameOver() == true)
-//			throw new IllegalArgumentException("Game Over: Cat wins");
 	}
-	
-	private boolean gameOver() {
-		if (blocks.get(catCoordinates[0]).get(catCoordinates[1]).isEdge())
+
+	public boolean gameOver() {
+		if (blocks.get(getBlockCoordinates(catPosition)[0]).get(getBlockCoordinates(catPosition)[1]).isEdge())
 			return true;
-		if (dijkstras() == false)
+		if (hasPath() == false)
 			return true;
 		return false;
 	}
-	
-	private boolean dijkstras() {
+
+	private boolean hasPath() {
 		Queue<Block> queue = new LinkedList<>();
-		Block referencePoint = blocks.get(catCoordinates[0]).get(catCoordinates[1]);
+		Block referencePoint = blocks.get(getBlockCoordinates(catPosition)[0]).get(getBlockCoordinates(catPosition)[1]);
 		queue.add(referencePoint);
 		ArrayList<ArrayList<Boolean>> bools = new ArrayList<>();
 		for (int i = 0; i < blocks.size(); i++) {
@@ -301,18 +281,19 @@ public class ChatNoirModel {
 			}
 		}
 		while (queue.isEmpty() == false) {
-			referencePoint = queue.remove();
-			int[] referenceCoordinates = getBlockCoordinates(referencePoint);
-			bools.get(referenceCoordinates[0]).set(referenceCoordinates[1], true);
-			ArrayList<Block> adjacentBlocks = selectAdjacentBlock(referencePoint);
-			for (int i = 0; i < 6; i++) {
-				if (!adjacentBlocks.get(i).containsWall() && !adjacentBlocks.get(i).isEdge()) {
-					int[] adjacentBlockCoordinates = getBlockCoordinates(adjacentBlocks.get(i));
-					if (bools.get(adjacentBlockCoordinates[0]).get(adjacentBlockCoordinates[1]) == false)
-						queue.add(adjacentBlocks.get(i));
+			Block referenceBlock = queue.remove();
+			if (referenceBlock.isEdge()) {
+				return true;
+			} else {
+				int[] referenceCoords = getBlockCoordinates(referenceBlock);
+				bools.get(referenceCoords[0]).set(referenceCoords[1], true);
+				ArrayList<Block> adjacentBlocks = selectAdjacentBlock(referenceBlock);
+				for (int i = 0; i < adjacentBlocks.size(); i++) {
+					int[] adjacentBlockCoords = getBlockCoordinates(adjacentBlocks.get(i));
+					if (bools.get(adjacentBlockCoords[0]).get(adjacentBlockCoords[1]) == false) {
+						queue.add(blocks.get(adjacentBlockCoords[0]).get(adjacentBlockCoords[1]));
+					}
 				}
-				else if (adjacentBlocks.get(i).isEdge())
-					return true;
 			}
 		}
 		return false;
