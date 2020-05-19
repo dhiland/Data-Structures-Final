@@ -1,4 +1,4 @@
-package application;
+package aDSFinal;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -28,7 +28,7 @@ public class ChatNoirModel {
 	/**
 	 * state switcher; toggles between human player and cat player turns
 	 */
-	private boolean catTurn = true;
+	public boolean catTurn = true;
 
 	/**
 	 * denotes the block the cat is currently on
@@ -135,26 +135,36 @@ public class ChatNoirModel {
 	 */
 	private ArrayList<Block> selectAdjacentBlock(Block currentBlock) {
 		ArrayList<Block> adjacentBlocks = new ArrayList<Block>();
-		adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0]).get(getBlockCoordinates(currentBlock)[1] - 1));
-		adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0]).get(getBlockCoordinates(currentBlock)[1] + 1));
-		adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1]));
-		adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1]));
+		adjacentBlocks
+				.add(blocks.get(getBlockCoordinates(currentBlock)[0]).get(getBlockCoordinates(currentBlock)[1] - 1));
+		adjacentBlocks
+				.add(blocks.get(getBlockCoordinates(currentBlock)[0]).get(getBlockCoordinates(currentBlock)[1] + 1));
+		adjacentBlocks
+				.add(blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1]));
+		adjacentBlocks
+				.add(blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1]));
 
 		// if the cat is in the top half of the board
 		if (getBlockCoordinates(currentBlock)[0] < 10) {
-			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1] - 1));
-			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1] + 1));
+			adjacentBlocks.add(
+					blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1] - 1));
+			adjacentBlocks.add(
+					blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1] + 1));
 		}
 		// if the cat is in the middle row of the board
 		else if (getBlockCoordinates(currentBlock)[0] == 10) {
-			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1] - 1));
-			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1] - 1));
+			adjacentBlocks.add(
+					blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1] - 1));
+			adjacentBlocks.add(
+					blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1] - 1));
 
 		}
 		// if the cat is in the bottom half of the board
 		else {
-			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1] + 1));
-			adjacentBlocks.add(blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1] - 1));
+			adjacentBlocks.add(
+					blocks.get(getBlockCoordinates(currentBlock)[0] - 1).get(getBlockCoordinates(currentBlock)[1] + 1));
+			adjacentBlocks.add(
+					blocks.get(getBlockCoordinates(currentBlock)[0] + 1).get(getBlockCoordinates(currentBlock)[1] - 1));
 
 		}
 		return adjacentBlocks;
@@ -168,7 +178,6 @@ public class ChatNoirModel {
 	 *                   adjacent to the cat
 	 */
 	private void moveCat(Block moveCatTo) throws Exception {
-		
 
 		if (moveCatTo.containsWall() == true) {
 			throw new Exception("Cat cannot be moved to a wall");
@@ -179,10 +188,9 @@ public class ChatNoirModel {
 			if (tempBlocks.get(i) == moveCatTo) {
 				catPosition.setContainsCat(false);
 				catPosition = moveCatTo;
-				
+
 				catPosition.setContainsCat(true);
-//				catCoordinates = getBlockCoordinates(moveCatTo);
-				
+
 			} else {
 				numberFailed++;
 			}
@@ -192,7 +200,7 @@ public class ChatNoirModel {
 		if (numberFailed == 6) {
 			throw new Exception("Cat must move to adjacent space");
 		}
-		
+
 	}
 
 	/**
@@ -230,7 +238,7 @@ public class ChatNoirModel {
 		Block clickedBlock = blocks.get(xCoord).get(yCoord);
 
 		if (catTurn) {
-			if (hasPath() == true) { // TODO why is this false??
+			if (hasPath() == true) {
 				moveCat(clickedBlock);
 				switchStates();
 			}
@@ -327,5 +335,16 @@ public class ChatNoirModel {
 			printout += '\n';
 		}
 		return printout;
+	}
+
+	public String getFeedback() {
+		if (catTurn == true && gameOver() == true) {
+			return "The Cat blocker wins";
+		} else if (catTurn == true) {
+			return "Cat turn";
+		} else if (catTurn == false && gameOver() == true) {
+			return "The Cat wins";
+		} else
+			return "Cat blocker's turn";
 	}
 }

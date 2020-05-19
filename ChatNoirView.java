@@ -1,4 +1,4 @@
-package application;
+package aDSFinal;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -187,8 +187,11 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 	@Override
 	public void handle(MouseEvent e) {
 		for (int i = 0; i < blocks.size(); i++) {
-			if (gameModel.gameOver() == true) {
+			if (gameModel.gameOver() == true && gameModel.catTurn == false) {
 				createAlert(AlertType.INFORMATION, "Congratulations", "Cat Wins");
+				break;
+			} else if (gameModel.gameOver() == true && gameModel.catTurn == true) {
+				createAlert(AlertType.INFORMATION, "Congratulations", "Cat blocker wins");
 				break;
 			}
 
