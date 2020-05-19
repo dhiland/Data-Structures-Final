@@ -1,5 +1,6 @@
-package aDSFinal;
+package application;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -28,17 +29,23 @@ public class ChatNoirModel {
 	/**
 	 * state switcher; toggles between human player and cat player turns
 	 */
-	public boolean catTurn = true;
+	private boolean catTurn;
 
 	/**
 	 * denotes the block the cat is currently on
 	 */
 	private Block catPosition;
+	
+	/**
+	 * Property change manager
+	 */
+	protected PropertyChangeSupport pcs;
 
 	/**
 	 * Constructor
 	 */
 	public ChatNoirModel() {
+		pcs = new PropertyChangeSupport(this);
 		initializeGrid();
 	}
 
@@ -92,13 +99,19 @@ public class ChatNoirModel {
 		// catLocation coordinates
 		try {
 			blocks.get(CENTER[0]).get(CENTER[1]).setContainsCat(true);
+			pcs.firePropertyChange("Cat Changed", null, blocks.get(CENTER[0]).get(CENTER[1]));
 			catPosition = blocks.get(CENTER[0]).get(CENTER[1]);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.getMessage();
 		}
 		// Generating randomly placed walls
 		randomWalls();
+		catTurn = true;
+	}
+	
+	public boolean getCatTurn() {
+		return catTurn;
 	}
 
 	/**
@@ -188,9 +201,8 @@ public class ChatNoirModel {
 			if (tempBlocks.get(i) == moveCatTo) {
 				catPosition.setContainsCat(false);
 				catPosition = moveCatTo;
-
 				catPosition.setContainsCat(true);
-
+				pcs.firePropertyChange("Cat Changed", null, catPosition);
 			} else {
 				numberFailed++;
 			}
@@ -244,6 +256,7 @@ public class ChatNoirModel {
 			}
 		} else {
 			clickedBlock.setContainsWall(true);
+			pcs.firePropertyChange("Wall Changed", null, clickedBlock);
 			switchStates();
 		}
 	}

@@ -1,6 +1,6 @@
-package aDSFinal;
+package application;
 
-
+import java.beans.PropertyChangeSupport;
 
 /**
  * One block in the grid of blocks necessary for Chat Noir
@@ -37,14 +37,22 @@ public class Block {
 	/**
 	 * Constructor with overload
 	 * 
-	 * @param containsWall if the Block contains a wall
-	 * @param containsCat  if the Block contains the cat
+	 * @param isEdge if the Block is at the edge of the grid
 	 */
 	public Block(boolean isEdge) {
 		this.isEdge = isEdge;
+		containsCat = false;
+		containsWall = false;
 	}
-	
-	public Block (boolean containsWall, boolean containsCat, boolean isEdge) {
+
+	/**
+	 * Constructor with overload
+	 * 
+	 * @param containsWall if the Block contains a wall
+	 * @param containsCat  if the Block contains the cat
+	 * @param isEdge       if the Block is at the edge of the grid
+	 */
+	public Block(boolean containsWall, boolean containsCat, boolean isEdge) {
 		this.containsWall = containsWall;
 		this.containsCat = containsCat;
 		this.isEdge = isEdge;

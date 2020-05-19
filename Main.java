@@ -1,4 +1,4 @@
-package aDSFinal;
+package application;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -37,6 +37,11 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 	 * Model for the current game
 	 */
 	private ChatNoirModel gameModel;
+	
+	/**
+	 * View for the game, covers the Grid
+	 */
+	private ChatNoirView gameView;
 
 	@Override
 	public void start(Stage PrimaryStage) {
@@ -47,16 +52,15 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
 			// Initializing view objects
 			gameModel = new ChatNoirModel();
+			
 			resetBtn = new Button("Reset");
 			resetBtn.setOnAction(this);
-			feedbackL = new Label("Lorem ipsum dolor sit amet, consectetur adipiscing elit."); // TODO write
-																								// getFeedback() method
-																								// in Model and fill
-																								// label
+			feedbackL = new Label(gameModel.getFeedback()); 
 
 			// Adding view objects to scene
 			root.getChildren().add(resetBtn);
-			root.getChildren().add(new ChatNoirView(this, gameModel));
+			gameView = new ChatNoirView(this, gameModel);
+			root.getChildren().add(gameView);
 			root.getChildren().add(feedbackL);
 
 			PrimaryStage.setScene(scene);
@@ -77,7 +81,10 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 			gameModel = new ChatNoirModel();
 			root.getChildren().clear();
 			root.getChildren().add(resetBtn);
-			root.getChildren().add(new ChatNoirView(this, gameModel));
+			gameModel.pcs.removePropertyChangeListener(gameView);
+			gameView = new ChatNoirView(this, gameModel);
+			root.getChildren().add(gameView);
+			feedbackL = new Label(gameModel.getFeedback());
 			root.getChildren().add(feedbackL);
 		}
 	}
@@ -88,7 +95,10 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 	public void redraw() {
 		root.getChildren().clear();
 		root.getChildren().add(resetBtn);
-		root.getChildren().add(new ChatNoirView(this, gameModel));
+		gameModel.pcs.removePropertyChangeListener(gameView);
+		gameView = new ChatNoirView(this, gameModel);
+		root.getChildren().add(gameView);
+		feedbackL = new Label(gameModel.getFeedback());
 		root.getChildren().add(feedbackL);
 		System.out.println(gameModel);
 	}

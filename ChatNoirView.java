@@ -1,7 +1,8 @@
-package aDSFinal;
+package application;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
 import javafx.scene.control.Alert;
@@ -58,6 +59,7 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 	 */
 	public ChatNoirView(Main mainReference, ChatNoirModel gameModel) {
 		this.gameModel = gameModel;
+		this.gameModel.pcs.addPropertyChangeListener(this);
 		this.mainReference = mainReference;
 		this.hBoxes = new ArrayList<>();
 		initializeBlocks();
@@ -187,10 +189,10 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 	@Override
 	public void handle(MouseEvent e) {
 		for (int i = 0; i < blocks.size(); i++) {
-			if (gameModel.gameOver() == true && gameModel.catTurn == false) {
+			if (gameModel.gameOver() == true && gameModel.getCatTurn() == false) {
 				createAlert(AlertType.INFORMATION, "Congratulations", "Cat Wins");
 				break;
-			} else if (gameModel.gameOver() == true && gameModel.catTurn == true) {
+			} else if (gameModel.gameOver() == true && gameModel.getCatTurn() == true) {
 				createAlert(AlertType.INFORMATION, "Congratulations", "Cat blocker wins");
 				break;
 			}
@@ -200,10 +202,6 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 				if (e.getSource() == blocks.get(i).get(j)) {
 					try {
 						gameModel.checkLegalMove(i, j);
-						mainReference.redraw();
-
-						// TODO delete line
-
 					} catch (IllegalArgumentException ie) {
 						System.err.println(ie.getMessage());
 						createAlert(AlertType.INFORMATION, "Game Over", ie.getMessage());
@@ -221,6 +219,5 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		mainReference.redraw();
-		// Anything that needs to be redone after data changes
 	}
 }
