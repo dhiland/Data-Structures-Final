@@ -1,8 +1,7 @@
-package application;
+package aDSFinal;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
 import javafx.scene.control.Alert;
@@ -23,7 +22,7 @@ import javafx.scene.shape.Rectangle;
  * 
  * @author Dominic Hiland
  * @author Josh Larson
- * @version 05/11/2020
+ * @version 05/20/2020
  */
 public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, PropertyChangeListener {
 
@@ -181,6 +180,10 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 
 	}
 
+	/**
+	 * Handle method that handles user mouse clicks This method also deals with game
+	 * over alerts and error messages
+	 */
 	@Override
 	public void handle(MouseEvent e) {
 		for (int i = 0; i < blocks.size(); i++) {
@@ -198,10 +201,8 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 					try {
 						gameModel.checkLegalMove(i, j);
 					} catch (IllegalArgumentException ie) {
-						System.err.println(ie.getMessage());
 						createAlert(AlertType.INFORMATION, "Game Over", ie.getMessage());
 					} catch (Exception ex) {
-						System.err.println(ex.getMessage());
 						createAlert(AlertType.ERROR, "Error", ex.getMessage());
 					}
 
@@ -211,6 +212,9 @@ public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, Prop
 		}
 	}
 
+	/**
+	 * Method that deals with property changes
+	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		mainReference.redraw();

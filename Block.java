@@ -1,13 +1,11 @@
-package application;
-
-import java.beans.PropertyChangeSupport;
+package aDSFinal;
 
 /**
  * One block in the grid of blocks necessary for Chat Noir
  * 
  * @author Dominic Hiland
  * @author Josh Larson
- * @version 05/11/2020
+ * @version 05/20/2020
  */
 public class Block {
 

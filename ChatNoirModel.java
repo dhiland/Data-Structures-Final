@@ -1,4 +1,4 @@
-package application;
+package aDSFinal;
 
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -6,14 +6,13 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Stack;
 
 /**
  * Model for the Chat Noir Game
  * 
  * @author Dominic Hiland
  * @author Josh Larson
- * @version 05/11/2020
+ * @version 05/20/2020
  */
 public class ChatNoirModel {
 
@@ -284,6 +283,12 @@ public class ChatNoirModel {
 		}
 	}
 
+	/**
+	 * Determines whether or not the game is over
+	 * 
+	 * @return true if the cat is blocked or has reached an edge
+	 * @return false if the cat is not yet at an edge, and can still reach an edge
+	 */
 	public boolean gameOver() {
 		if (blocks.get(getBlockCoordinates(catPosition)[0]).get(getBlockCoordinates(catPosition)[1]).isEdge())
 			return true;
@@ -349,35 +354,6 @@ public class ChatNoirModel {
 		return false;
 	}
 
-	@Override
-	public String toString() {
-		String printout = new String();
-		// Numbering the rows of the printout
-		for (int i = 0; i < 21; i++) {
-			// Conditions keep columns in-line with one another
-			if (i < 10)
-				printout += i + ":   ";
-			else
-				printout += i + ":  ";
-			// Populating rows with appropriate number of spaces to match the grid
-			for (int j = 0; j < blocks.get(i).size(); j++) {
-				// Changes the character printed based on the status of the block (i.e. if it
-				// contains a wall print a 'W' or if it contains the cat print a 'C'. If the
-				// block is empty print a '-'
-				if (blocks.get(i).get(j).containsWall() || blocks.get(i).get(j).containsCat()) {
-					if (blocks.get(i).get(j).containsWall())
-						printout += 'W';
-					else
-						printout += 'C';
-				} else {
-					printout += '-';
-				}
-			}
-			printout += '\n';
-		}
-		return printout;
-	}
-
 	/**
 	 * Creates a feedback String that says whose turn it is or who won
 	 * 
@@ -388,11 +364,12 @@ public class ChatNoirModel {
 			return "Cat Turn";
 		String message;
 		if (catTurn == true && gameOver() == true) {
+			message = "The Cat wins";
+
+		} else if (catTurn == false && gameOver() == true) {
 			message = "The Cat blocker wins";
 		} else if (catTurn == false) {
 			message = "Cat's turn";
-		} else if (catTurn == true && gameOver() == true) {
-			message = "The Cat wins";
 		} else
 			message = "Cat blocker's turn";
 		return message;

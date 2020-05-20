@@ -1,4 +1,4 @@
-package application;
+package aDSFinal;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -14,7 +14,7 @@ import javafx.stage.Stage;
  * 
  * @author Dominic Hiland
  * @author Josh Larson
- * @version 05/11/2020
+ * @version 05/20/2020
  */
 public class Main extends Application implements EventHandler<ActionEvent> {
 
@@ -37,12 +37,15 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 	 * Model for the current game
 	 */
 	private ChatNoirModel gameModel;
-	
+
 	/**
 	 * View for the game, covers the Grid
 	 */
 	private ChatNoirView gameView;
 
+	/**
+	 * Method responsible for launching the gameboard
+	 */
 	@Override
 	public void start(Stage PrimaryStage) {
 		try {
@@ -52,10 +55,10 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 
 			// Initializing view objects
 			gameModel = new ChatNoirModel();
-			
+
 			resetBtn = new Button("Reset");
 			resetBtn.setOnAction(this);
-			feedbackL = new Label(gameModel.getFeedback()); 
+			feedbackL = new Label(gameModel.getFeedback());
 
 			// Adding view objects to scene
 			root.getChildren().add(resetBtn);
@@ -75,6 +78,9 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 		launch(args);
 	}
 
+	/**
+	 * Method that handles when the user clicks the reset button
+	 */
 	@Override
 	public void handle(ActionEvent e) {
 		if (e.getSource() == resetBtn) {
@@ -100,6 +106,5 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 		root.getChildren().add(gameView);
 		feedbackL = new Label(gameModel.getFeedback());
 		root.getChildren().add(feedbackL);
-		System.out.println(gameModel);
 	}
 }
