@@ -2,6 +2,7 @@ package application;
 
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -35,7 +36,12 @@ public class ChatNoirModel {
 	 * denotes the block the cat is currently on
 	 */
 	private Block catPosition;
-	
+
+	/**
+	 * Denotes that it is the first turn of the game
+	 */
+	private boolean turnOne = true;
+
 	/**
 	 * Property change manager
 	 */
@@ -109,7 +115,12 @@ public class ChatNoirModel {
 		randomWalls();
 		catTurn = true;
 	}
-	
+
+	/**
+	 * getter for catTurn
+	 * 
+	 * @return if it is the cat's turn
+	 */
 	public boolean getCatTurn() {
 		return catTurn;
 	}
@@ -219,6 +230,7 @@ public class ChatNoirModel {
 	 * Method that keeps track of who's turn it is
 	 */
 	private void switchStates() {
+		turnOne = false;
 		if (catTurn == true) {
 			catTurn = false;
 		} else
@@ -235,20 +247,31 @@ public class ChatNoirModel {
 	private int[] getBlockCoordinates(Block blockInQuestion) {
 		int[] blockCoordinates = new int[2];
 		for (int i = 0; i < blocks.size(); i++) {
+			boolean breaker = false;
 			for (int j = 0; j < blocks.get(i).size(); j++) {
 				if (blocks.get(i).get(j) == blockInQuestion) {
 					blockCoordinates[0] = i;
 					blockCoordinates[1] = j;
+					breaker = true;
+					break;
 				}
 			}
+			if (breaker == true)
+				break;
 		}
 		return blockCoordinates;
 
 	}
 
+	/**
+	 * Determines if a user selection is a legal move
+	 * 
+	 * @param xCoord the x coordinate of the block selected
+	 * @param yCoord the y coordinate of the block selected
+	 * @throws Exception if the move is illegal
+	 */
 	public void checkLegalMove(int xCoord, int yCoord) throws Exception {
 		Block clickedBlock = blocks.get(xCoord).get(yCoord);
-
 		if (catTurn) {
 			if (hasPath() == true) {
 				moveCat(clickedBlock);
@@ -269,6 +292,11 @@ public class ChatNoirModel {
 		return false;
 	}
 
+	/**
+	 * Uses Dijkstra's Algorithm to determine if the cat has a valid path to an edge
+	 * 
+	 * @return if the cat has a valid path to an edge
+	 */
 	private boolean hasPath() {
 		Queue<Block> queue = new LinkedList<>();
 		Block referencePoint = blocks.get(getBlockCoordinates(catPosition)[0]).get(getBlockCoordinates(catPosition)[1]);
@@ -350,14 +378,23 @@ public class ChatNoirModel {
 		return printout;
 	}
 
+	/**
+	 * Creates a feedback String that says whose turn it is or who won
+	 * 
+	 * @return feedback String
+	 */
 	public String getFeedback() {
+		if (turnOne && Arrays.equals(getBlockCoordinates(catPosition), CENTER))
+			return "Cat Turn";
+		String message;
 		if (catTurn == true && gameOver() == true) {
-			return "The Cat blocker wins";
-		} else if (catTurn == true) {
-			return "Cat turn";
-		} else if (catTurn == false && gameOver() == true) {
-			return "The Cat wins";
+			message = "The Cat blocker wins";
+		} else if (catTurn == false) {
+			message = "Cat's turn";
+		} else if (catTurn == true && gameOver() == true) {
+			message = "The Cat wins";
 		} else
-			return "Cat blocker's turn";
+			message = "Cat blocker's turn";
+		return message;
 	}
 }

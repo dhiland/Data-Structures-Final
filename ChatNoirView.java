@@ -28,11 +28,6 @@ import javafx.scene.shape.Rectangle;
 public class ChatNoirView extends VBox implements EventHandler<MouseEvent>, PropertyChangeListener {
 
 	/**
-	 * Coordinates of the center of the grid
-	 */
-	private final int[] CENTER = { 10, 5 };
-
-	/**
 	 * 2D ArrayList of Rectangles, Stores the Viewable game grid
 	 */
 	private ArrayList<ArrayList<Rectangle>> blocks;
